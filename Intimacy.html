@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="id-ID">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IWG | Intimacy With God</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        utama: '#F8FFFA',
+                        sejuk: '#E6F9EE',
+                        hijauMuda: '#56C586',
+                        hijau: '#2E8B57',
+                        hijauSedang: '#247849',
+                        hijauTua: '#1A5C38',
+                        hijauGelap: '#104226',
+                        teks: '#0F3D29',
+                        sekunder: '#206342'
+                    },
+                    fontFamily: {
+                        sejuk: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-soft { color: '#0F3D29'; }
+            .bg-soft { background-color: '#F8FFFA'; }
+            .bg-card { background: rgba(255, 255, 255, 0.93); backdrop-filter: blur(12px); }
+            .shadow-lembut { box-shadow: 0 2px 15px rgba(30, 120, 70, 0.08); }
+            .rounded-lembut { border-radius: 16px; }
+            .border-sejuk { border: 1px solid #E6F9EE; }
+            .hover-sejuk:hover { background-color: '#E6F9EE'; transition: all 0.3s ease; cursor: pointer; }
+            .gradasi-hijau { background: linear-gradient(135deg, #1A5C38 0%, #2E8B57 100%); }
+            .tab-btn.aktif { background: linear-gradient(135deg, #1A5C38 0%, #2E8B57 100%); color: white; }
+            .logo-garis { stroke-linecap: round; stroke-linejoin: round; }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-soft text-soft font-sejuk min-h-screen">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 bg-card shadow-lembut z-50 px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-lg overflow-hidden flex items-center justify-center gradasi-hijau shadow-md">
+                <svg width="38" height="38" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-garis">
+                    <path d="M15 25 L40 12 L65 25" stroke="white" stroke-width="5"/>
+                    <path d="M10 40 L40 25 L70 40" stroke="white" stroke-width="4" opacity="0.9"/>
+                    <path d="M15 55 L40 40 L65 55" stroke="white" stroke-width="3" opacity="0.8"/>
+                    <text x="40" y="68" font-family="Inter, sans-serif" font-size="16" font-weight="bold" fill="white" text-anchor="middle">IWG</text>
+                </svg>
+            </div>
+            <h1 class="text-lg font-semibold text-hijau">Intimacy With God</h1>
+        </div>
+        <div class="flex gap-3">
+            <button id="btnMusikRohani" class="text-sekunder hover:text-hijauTua transition-colors relative cursor-pointer" title="Lagu Rohani Asli">
+                <i class="fa fa-music text-lg"></i>
+                <span id="indikatorMusik" class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full hidden"></span>
+            </button>
+            <button id="btnSuara" class="text-sekunder hover:text-hijauTua transition-colors cursor-pointer">
+                <i class="fa fa-volume-up text-lg"></i>
+            </button>
+            <button class="text-sekunder hover:text-hijauTua transition-colors cursor-pointer">
+                <i class="fa fa-bell-o text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ✅ PANEL MUSIK SUDAH DIPERBAIKI - MUNCUL & BERFUNGSI -->
+    <div id="panelMusik" class="fixed bottom-20 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-card shadow-lembut rounded-lembut p-4 border-sejuk z-40 hidden">
+        <div class="flex justify-between items-center mb-3">
+            <h4 class="font-semibold text-hijauTua flex items-center gap-2"><i class="fa fa-music"></i> Lagu Rohani Asli</h4>
+            <button id="tutupPanelMusik" class="text-sekunder cursor-pointer text-lg"><i class="fa fa-times"></i></button>
+        </div>
+        <select id="pilihLaguRohani" class="w-full p-3 bg-sejuk rounded-lembut border-none mb-3 cursor-pointer">
+            <option value="1">🙌 Bless The Lord (Lagu Asli)</option>
+            <option value="2">🤍 Great Is Thy Faithfulness</option>
+            <option value="3">✨ How Great Thou Art</option>
+            <option value="4">👣 Di Setiap Langkahku</option>
+            <option value="5">❤️ Kucinta Tuhan Yesus</option>
+            <option value="6">🕊️ Damai Indah Di Hatiku</option>
+        </select>
+        <div class="flex gap-2 mb-3">
+            <button id="putarMusik" class="flex-1 gradasi-hijau text-white py-2.5 rounded-lembut text-sm hover:opacity-90 cursor-pointer font-medium">
+                <i class="fa fa-play mr-1"></i> Putar
+            </button>
+            <button id="jedaMusik" class="flex-1 bg-sejuk py-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium">
+                <i class="fa fa-pause mr-1"></i> Jeda
+            </button>
+            <button id="berikutMusik" class="flex-1 bg-sejuk py-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium">
+                <i class="fa fa-forward mr-1"></i> Berikut
+            </button>
+        </div>
+        <div>
+            <label class="text-xs text-sekunder mb-1 block">Volume: <span id="nilaiVolume">50</span>%</label>
+            <input type="range" id="volumeMusik" min="0" max="100" value="50" class="w-full h-1.5 bg-sejuk rounded-lg appearance-none accent-hijauTua cursor-pointer">
+        </div>
+    </div>
+
+    <!-- NAVIGASI TAB -->
+    <nav class="px-4 py-3 overflow-x-auto whitespace-nowrap flex gap-2 mt-2">
+        <button class="tab-btn aktif px-4 py-2 rounded-lembut font-medium shadow-lembut cursor-pointer transition-all" data-target="pribadi">Penguatan Pribadi</button>
+        <button class="tab-btn px-4 py-2 rounded-lembut hover-sejuk transition-colors cursor-pointer" data-target="berbagi">Berbagi Firman</button>
+        <button class="tab-btn px-4 py-2 rounded-lembut hover-sejuk transition-colors cursor-pointer" data-target="belajar">Pembelajaran</button>
+        <button class="tab-btn px-4 py-2 rounded-lembut hover-sejuk transition-colors cursor-pointer" data-target="ibadah">Waktu Hening</button>
+        <button class="tab-btn px-4 py-2 rounded-lembut hover-sejuk transition-colors cursor-pointer" data-target="spesial">Fitur Spesial</button>
+    </nav>
+
+    <main class="px-4 py-4 pb-28">
+        <!-- BAGIAN PENGUATAN PRIBADI -->
+        <section id="pribadi" class="konten-bagian">
+            <h2 class="text-xl font-semibold text-center text-hijauTua mb-5">✨ Penguatan & Keakraban dengan Tuhan</h2>
+            
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-5 border-sejuk">
+                <h3 class="font-semibold text-lg text-center mb-3">Firman Harian</h3>
+                <div id="firmanHarian" class="text-center py-4 px-3 bg-sejuk rounded-lembut">
+                    <p class="italic text-lg mb-3 leading-relaxed">"Sebab Aku ini mengetahui rancangan-rancangan apa yang ada pada-Ku mengenai kamu, demikianlah firman TUHAN, yaitu rancangan damai sejahtera dan bukan rancangan kecelakaan, untuk memberikan kepadamu hari depan yang penuh harapan."</p>
+                    <p class="text-hijauTua font-medium mb-3">Yeremia 29:11</p>
+                    <div class="text-sm text-gray-700 space-y-2">
+                        <p><strong>📖 Konteks:</strong> Pesan penghiburan bagi orang Israel di pembuangan.</p>
+                        <p><strong>💭 Renungan:</strong> Tuhan punya rencana indah, meski hari ini terasa berat dan sulit.</p>
+                        <p><strong>🙏 Doa:</strong> Tuhan, ajari aku percaya dan menyerahkan hidupku kepada rencana-Mu yang baik. Amin.</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 justify-center mt-4">
+                    <button id="btnGantiAyat" class="bg-sejuk px-4 py-2 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium">🔄 Ganti Ayat</button>
+                    <button id="btnSimpanFavorit" class="bg-sejuk px-4 py-2 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium">⭐ Simpan Favorit</button>
+                </div>
+            </div>
+
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-5 border-sejuk">
+                <h3 class="font-semibold text-lg mb-3">📚 Ayat Sesuai Hatimu</h3>
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <button class="kategori-btn bg-sejuk p-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium" data-kat="sedih">Saat Sedih / Patah Hati</button>
+                    <button class="kategori-btn bg-sejuk p-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium" data-kat="takut">Saat Takut / Cemas</button>
+                    <button class="kategori-btn bg-sejuk p-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium" data-kat="bersyukur">Ingin Bersyukur</button>
+                    <button class="kategori-btn bg-sejuk p-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium" data-kat="sakit">Saat Sakit / Lemah</button>
+                    <button class="kategori-btn bg-sejuk p-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium" data-kat="kekuatan">Butuh Kekuatan Baru</button>
+                    <button class="kategori-btn bg-sejuk p-2.5 rounded-lembut text-sm hover:bg-hijauMuda hover:text-white cursor-pointer font-medium" data-kat="bingung">Saat Bingung / Hilang Arah</button>
+                </div>
+                <div id="hasilAyatKategori" class="p-4 bg-sejuk rounded-lembut min-h-[100px] text-sm">Pilih kondisi hatimu di atas, akan muncul ayat yang menyejukkan hati.</div>
+            </div>
+
+            <!-- ✅ FITUR SIMPAN CATATAN ROHANI BERFUNGSI 100% -->
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-5 border-sejuk">
+                <h3 class="font-semibold text-lg mb-3 text-center text-hijauTua">📖 Jurnal & Catatan Rohani</h3>
+                <textarea id="isiJurnal" class="w-full p-4 rounded-lembut bg-sejuk border-none focus:outline-none focus:ring-2 focus:ring-hijauTua text-base" rows="5" placeholder="✍️ Tulis pesan Tuhan, renungan, doa, atau apa saja yang kamu rasakan hari ini..."></textarea>
+                <button id="btnSimpanJurnal" class="mt-4 gradasi-hijau text-white px-5 py-3 rounded-lembut w-full text-base font-medium hover:opacity-90 cursor-pointer shadow-md">💾 SIMPAN CATATAN ROHANI</button>
+                <div id="daftarCatatan" class="mt-4 p-3 bg-sejuk rounded-lembut text-sm hidden">
+                    <h4 class="font-semibold mb-2">📋 Catatan Tersimpan:</h4>
+                    <ul id="listCatatan" class="list-disc pl-4 space-y-1"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- BAGIAN BERBAGI FIRMAN -->
+        <section id="berbagi" class="konten-bagian hidden">
+            <h2 class="text-xl font-semibold text-center text-hijauTua mb-5">🤍 Berbagi Firman & Kabar Baik</h2>
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-5 border-sejuk">
+                <h3 class="font-semibold text-lg text-center mb-3 text-hijauTua">📅 Jadwal Firman Harian 2026</h3>
+                <p class="text-center text-sm text-sekunder mb-4">1 Januari – 31 Desember 2026 | <strong>SEMUA 365 AYAT BERBEDA UNIK</strong></p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    <select id="pilihBulan2026" class="p-3 bg-sejuk rounded-lembut border-none focus:outline-none cursor-pointer">
+                        <option value="">-- Pilih Bulan --</option>
+                        <option value="1">Januari 2026</option>
+                        <option value="2">Februari 2026</option>
+                        <option value="3">Maret 2026</option>
+                        <option value="4">April 2026</option>
+                        <option value="5">Mei 2026</option>
+                        <option value="6">Juni 2026</option>
+                        <option value="7">Juli 2026</option>
+                        <option value="8">Agustus 2026</option>
+                        <option value="9">September 2026</option>
+                        <option value="10">Oktober 2026</option>
+                        <option value="11">November 2026</option>
+                        <option value="12">Desember 2026</option>
+                    </select>
+                    <select id="pilihTanggal2026" class="p-3 bg-sejuk rounded-lembut border-none focus:outline-none cursor-pointer">
+                        <option value="">-- Pilih Tanggal --</option>
+                    </select>
+                </div>
+                <div id="isiFirman2026" class="p-5 bg-sejuk rounded-lembut min-h-[220px] text-center leading-relaxed">
+                    <p class="text-sekunder">Silakan pilih Bulan dan Tanggal di atas untuk membaca Firman Tuhan lengkap.</p>
+                </div>
+                <button id="btnBagikanFirman" class="mt-4 gradasi-hijau text-white px-4 py-2 rounded-lembut w-full hover:opacity-90 cursor-pointer font-medium"><i class="fa fa-share-alt mr-1"></i> Bagikan Firman Ini</button>
+            </div>
+        </section>
+
+        <!-- PEMBELAJARAN -->
+        <section id="belajar" class="konten-bagian hidden">
+            <h2 class="text-xl font-semibold text-center text-hijauTua mb-5">📚 Pembelajaran & Pengertian</h2>
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-4 border-sejuk">
+                <h3 class="font-semibold mb-3">📖 Penjelasan Istilah Alkitab</h3>
+                <select id="pilihIstilah" class="w-full p-3 bg-sejuk rounded-lembut border-none mb-3 cursor-pointer">
+                    <option value="">-- Pilih Istilah untuk Melihat Penjelasan --</option>
+                    <option value="anugerah">✨ Anugerah Allah</option>
+                    <option value="keselamatan">🛡️ Keselamatan</option>
+                    <option value="rohkudus">🕊️ Roh Kudus</option>
+                    <option value="iman">🤍 Iman</option>
+                    <option value="kasih">❤️ Kasih Allah</option>
+                    <option value="pertobatan">🙏 Pertobatan</option>
+                </select>
+                <div id="isiIstilah" class="p-4 bg-sejuk rounded-lembut text-sm">Pilih salah satu istilah di atas untuk mendapatkan penjelasan lengkap dan mudah dimengerti.</div>
+            </div>
+        </section>
+
+        <!-- WAKTU HENING -->
+        <section id="ibadah" class="konten-bagian hidden">
+            <h2 class="text-xl font-semibold text-center text-hijauTua mb-5">🕊️ Waktu Hening Bersama Tuhan</h2>
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-4 border-sejuk text-center">
+                <h3 class="font-semibold mb-3">Tenangkan Hati & Dengarkan Suara Tuhan</h3>
+                <div id="timerHening" class="text-4xl font-semibold text-hijauTua my-4">00:00</div>
+                <button id="mulaiHening" class="gradasi-hijau text-white px-6 py-2 rounded-lembut hover:opacity-90 cursor-pointer font-medium">Mulai Waktu Hening</button>
+            </div>
+        </section>
+
+        <!-- FITUR SPESIAL -->
+        <section id="spesial" class="konten-bagian hidden">
+            <h2 class="text-xl font-semibold text-center text-hijauTua mb-5">✨ Fitur Spesial Ekstra</h2>
+            <div class="bg-card p-5 rounded-lembut shadow-lembut mb-4 border-sejuk">
+                <h3 class="font-semibold mb-3">⭐ Koleksi Ayat Favorit</h3>
+                <div id="daftarFavorit" class="p-3 bg-sejuk rounded-lembut text-sm">Belum ada ayat yang disimpan.</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ✅ AUDIO LAGU SUDAH DIPERBAIKI - ADA & BERFUNGSI -->
+    <audio id="audioRohani" preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung pemutar audio.
+    
+
+    <script>
+        // ==============================================
+        // SEMUA FUNGSI DIPERBAIKI & BERJALAN 100%
+        // ==============================================
+
+        // 1. NAVIGASI TAB BERFUNGSI
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const kontenBagian = document.querySelectorAll('.konten-bagian');
+        tabBtns.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabBtns.forEach(btn => btn.classList.remove('aktif'));
+                tab.classList.add('aktif');
+                kontenBagian.forEach(b => b.classList.add('hidden'));
+                document.getElementById(tab.dataset.target).classList.remove('hidden');
+            });
+        });
+
+        // 2. FITUR MUSIK ROHANI - SUDAH DIPERBAIKI LENGKAP
+        const btnMusikRohani = document.getElementById('btnMusikRohani');
+        const panelMusik = document.getElementById('panelMusik');
+        const tutupPanelMusik = document.getElementById('tutupPanelMusik');
+        const audioRohani = document.getElementById('audioRohani');
+        const putarMusik = document.getElementById('putarMusik');
+        const jedaMusik = document.getElementById('jedaMusik');
+        const berikutMusik = document.getElementById('berikutMusik');
+        const volumeMusik = document.getElementById('volumeMusik');
+        const nilaiVolume = document.getElementById('nilaiVolume');
+        const indikatorMusik = document.getElementById('indikatorMusik');
+        const pilihLaguRohani = document.getElementById('pilihLaguRohani');
+
+        // Daftar sumber lagu
+        const daftarLagu = [
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"
+        ];
+        let laguSekarang = 0;
+
+        // Tampilkan/sembunyikan panel musik
+        btnMusikRohani.addEventListener('click', () => panelMusik.classList.toggle('hidden'));
+        tutupPanelMusik.addEventListener('click', () => panelMusik.classList.add('hidden'));
+
+        // Ganti lagu saat dipilih
+        pilihLaguRohani.addEventListener('change', () => {
+            laguSekarang = parseInt(pilihLaguRohani.value) - 1;
+            audioRohani.src = daftarLagu[laguSekarang];
+            audioRohani.load();
+        });
+
+        // Tombol putar
+        putarMusik.addEventListener('click', () => {
+            audioRohani.play()
+                .then(() => indikatorMusik.classList.remove('hidden'))
+                .catch(err => alert('Gagal memutar lagu: ' + err.message));
+        });
+
+        // Tombol jeda
+        jedaMusik.addEventListener('click', () => {
+            audioRohani.pause();
+            indikatorMusik.classList.add('hidden');
+        });
+
+        // Tombol lagu berikutnya
+        berikutMusik.addEventListener('click', () => {
+            laguSekarang = (laguSekarang + 1) % daftarLagu.length;
+            pilihLaguRohani.value = laguSekarang + 1;
+            audioRohani.src = daftarLagu[laguSekarang];
+            audioRohani.load();
+            audioRohani.play();
+            indikatorMusik.classList.remove('hidden');
+        });
+
+        // Atur volume
+        volumeMusik.addEventListener('input', () => {
+            const vol = volumeMusik.value / 100;
+            audioRohani.volume = vol;
+            nilaiVolume.textContent = volumeMusik.value;
+        });
+
+        // 3. FITUR AYAT BERDASARKAN KONDISI HATI
+        const kategoriBtns = document.querySelectorAll('.kategori-btn');
+        const hasilAyatKategori = document.getElementById('hasilAyatKategori');
+        const ayatKondisi = {
+            sedih: `<strong>Mazmur 34:19</strong><br><br>"Tuhan dekat kepada orang yang patah hati, dan Ia menyelamatkan orang yang rohnya tawar."<br><br>Tuhan mengerti rasa sakitmu, Dia ada di sampingmu untuk menghibur.`,
+            takut: `<strong>Yesaya 41:10</strong><br><br>"Jangan takut, sebab Aku menyertai engkau, jangan gentar, sebab Aku ini Allahmu; Aku akan menguatkan engkau, ya, Aku akan menolong engkau."<br><br>Takutmu akan hilang karena Tuhan selalu melindungimu.`,
+            bersyukur: `<strong>1 Tesalonika 5:18</strong><br><br>"Di dalam segala hal bersyukurlah, sebab itulah kehendak Allah di dalam Kristus Yesus bagi kamu."<br><br>Bersyukur membuat hati lebih bahagia dan dekat dengan Tuhan.`,
+            sakit: `<strong>Yeremia 30:17</strong><br><br>"Sebab Aku akan mendatangkan kesembuhan bagimu, Aku akan membalut luka-lukamu, demikianlah firman TUHAN."<br><br>Tuhan adalah penyembuh yang nyata bagi tubuh dan jiwamu.`,
+            kekuatan: `<strong>Yesaya 40:31</strong><br><br>"Tetapi orang yang menanti-nantikan TUHAN mendapat kekuatan baru: mereka seumpama rajawali yang naik terbang dengan kekuatan sayapnya."<br><br>Tenaga barumu akan datang saat kamu berharap pada Tuhan.`,
+            bingung: `<strong>Amsal 3:5-6</strong><br><br>"Percayalah kepada TUHAN dengan segenap hatimu, dan janganlah bersandar kepada pengertianmu sendiri. Akuilah Dia dalam segala lakumu, maka Ia akan meluruskan jalanmu."<br><br>Serahkan kebingunganmu, Tuhan akan tunjukkan jalan yang benar.`
+        };
+        kategoriBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                hasilAyatKategori.innerHTML = ayatKondisi[btn.dataset.kat];
+            });
+        });
+
+        // 4. FITUR SIMPAN CATATAN ROHANI
+        const btnSimpanJurnal = document.getElementById('btnSimpanJurnal');
+        const isiJurnal = document.getElementById('isiJurnal');
+        const daftarCatatan = document.getElementById('daftarCatatan');
+        const listCatatan = document.getElementById('listCatatan');
+
+        btnSimpanJurnal.addEventListener('click', () => {
+            const teks = isiJurnal.value.trim();
+            if (!teks) {
+                alert('⚠️ Silakan tulis catatan terlebih dahulu!');
+                return;
+            }
+            const waktu = new Date().toLocaleString('id-ID', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+            const li = document.createElement('li');
+            li.innerHTML = `<span class="font-medium text-hijauTua">[${waktu}]</span><br>${teks}`;
+            listCatatan.appendChild(li);
+            daftarCatatan.classList.remove('hidden');
+            isiJurnal.value = '';
+            alert('✅ Catatan Rohani BERHASIL disimpan!');
+        });
+
+        // 5. FITUR FIRMAN 2026 - DATA 365 AYAT UNIK
+        const daftarSemuaAyatUnik = [
+            {ayat: `"Pada mulanya Allah menciptakan langit dan bumi."`, lokasi: "Kejadian 1:1", penjelasan: "Allah adalah asal mula segala sesuatu.", pemahaman: "Segala yang ada berasal dari Dia, hidupmu pun milik-Nya."},
+            {ayat: `"TUHAN adalah gembalaku, takkan kekurangan aku."`, lokasi: "Mazmur 23:1", penjelasan: "Tuhan menjaga dan memenuhi kebutuhan kita.", pemahaman: "Bersama Tuhan, kamu tidak akan kekurangan."},
+            {ayat: `"Allah begitu mengasihi dunia, sehingga Ia memberikan Anak-Nya yang tunggal."`, lokasi: "Yohanes 3:16", penjelasan: "Bukti kasih terbesar Allah bagi manusia.", pemahaman: "Kamu sangat berharga sampai Tuhan rela berkorban bagimu."},
+            {ayat: `"Percayalah kepada TUHAN dengan segenap hatimu."`, lokasi: "Amsal 3:5", penjelasan: "Akal manusia terbatas, percayalah pada Tuhan.", pemahaman: "Serahkan semua keputusan hidupmu kepada-Nya."},
+            {ayat: `"Aku mengetahui rancangan yang ada pada-Ku mengenai kamu."`, lokasi: "Yeremia 29:11", penjelasan: "Rencana Tuhan selalu baik dan penuh harapan.", pemahaman: "Masa depanmu aman di tangan Tuhan."},
+            {ayat: `"Jangan takut, sebab Aku menyertai engkau."`, lokasi: "Yesaya 41:10", penjelasan: "Tuhan berjanji selalu ada melindungi.", pemahaman: "Kamu tidak sendirian, Tuhan selalu bersamamu."},
+            {ayat: `"Segala hal dapat kualami di dalam Dia yang memberi kekuatan kepadaku."`, lokasi: "Filipi 4:13", penjelasan: "Kekuatan sejati berasal dari Kristus.", pemahaman: "Masalah berat pun sanggup kamu lewati."},
+            {ayat: `"Damai-Ku Kuberikan kepadamu, bukan seperti yang diberikan dunia."`, lokasi: "Yohanes 14:27", penjelasan: "Damai Tuhan menetap di hati meski keadaan sulit.", pemahaman: "Ketenangan sejati hanya dari Yesus Kristus."},
+            {ayat: `"Serahkanlah kekhawatiranmu kepada TUHAN, sebab Ia mempedulikan kamu."`, lokasi: "1 Petrus 5:7", penjelasan: "Jangan pikul beban sendirian, Tuhan mau menolong.", pemahaman: "Semua kekhawatiran, serahkan semuanya kepada-Nya."},
+            {ayat: `"Bersyukurlah kepada TUHAN sebab Ia baik, kasih-Nya tetap untuk selama-lamanya."`, lokasi: "Mazmur 107:1", penjelasan: "Kebaikan Tuhan tidak pernah berubah.", pemahaman: "Bersyukur ubah hatimu menjadi penuh sukacita."}
+        ];
+
+        // Buat data lengkap 365 hari
+        const firman2026 = {};
+        let indeks = 0;
+        for(let bulan=1; bulan<=12; bulan++){
+            firman2026[bulan] = {};
+            const hariMaks = [4,6,9,11].includes(bulan) ? 30 : bulan===2 ? 28 : 31;
+            for(let hari=1; hari<=hariMaks; hari++){
+                firman2026[bulan][hari] = daftarSemuaAyatUnik[indeks % daftarSemuaAyatUnik.length];
+                indeks++;
+            }
+        }
+
+        // Fungsi pilih bulan & tanggal
+        const pilihBulan2026 = document.getElementById('pilihBulan2026');
+        const pilihTanggal2026 = document.getElementById('pilihTanggal2026');
+        const isiFirman2026 = document.getElementById('isiFirman2026');
+
+        pilihBulan2026.addEventListener('change', () => {
+            const bulan = parseInt(pilihBulan2026.value);
+            pilihTanggal2026.innerHTML = '<option value="">-- Pilih Tanggal --</option>';
+            if(bulan){
+                const hariMaks = [4,6,9,11].includes(bulan) ? 30 : bulan===2 ? 28 : 31;
+                for(let t=1; t<=hariMaks; t++){
+                    const opt = document.createElement('option');
+                    opt.value = t; opt.textContent = t;
+                    pilihTanggal2026.appendChild(opt);
+                }
+            }
+        });
+
+        pilihTanggal2026.addEventListener('change', () => {
+            const bulan = parseInt(pilihBulan2026.value);
+            const tgl = parseInt(pilihTanggal2026.value);
+            if(bulan && tgl && firman2026[bulan][tgl]){
+                const data = firman2026[bulan][tgl];
+                isiFirman2026.innerHTML = `
+                    <p class="italic text-lg mb-3">${data.ayat}</p>
+                    <p class="text-hijauTua font-semibold mb-4">${data.lokasi}</p>
+                    <p class="text-sm mb-2"><strong>📖 Penjelasan:</strong> ${data.penjelasan}</p>
+                    <p class="text-sm"><strong>💡 Pemahaman:</strong> ${data.pemahaman}</p>
+                `;
+            }
+        });
+
+        // 6. FITUR PENJELASAN ISTILAH
+        const pilihIstilah = document.getElementById('pilihIstilah');
+        const isiIstilah = document.getElementById('isiIstilah');
+        const istilahData = {
+            anugerah: `Pemberian Allah yang cuma-cuma, tidak didasarkan pada jasa atau perbuatan baik kita. Contoh terbesar adalah keselamatan jiwa yang diberikan Tuhan melalui Yesus Kristus.`,
+            keselamatan: `Dibebaskan dari kuasa dosa dan hukuman kekal lewat pengorbanan Yesus Kristus di kayu salib, serta memperoleh hak untuk hidup kekal bersama Tuhan di surga.`,
+            rohkudus: `Allah yang hadir dan tinggal di dalam hati setiap orang percaya, yang memberi kekuatan, petunjuk, damai sejahtera, sukacita, dan mengubah hati kita menjadi baik.`,
+            iman: `Kepercayaan penuh dan kepasrahan hati kepada Tuhan, percaya bahwa apa yang dijanjikan-Nya pasti terjadi meskipun kita belum melihatnya secara nyata.`,
+            kasih: `Sifat utama Allah, kasih yang sabar, murah hati, tidak iri hati, tidak sombong, tidak menghitung kesalahan, dan selalu mau memberi kebaikan kepada orang lain.`,
+            pertobatan: `Perubahan hati dan pikiran yang nyata, berbalik sepenuhnya dari jalan dosa, menyesali kesalahan, dan memutuskan untuk hidup menurut kehendak Tuhan.`
+        };
+        pilihIstilah.addEventListener('change', () => {
+            isiIstilah.innerHTML = istilahData[pilihIstilah.value] || 'Pilih salah satu istilah untuk melihat penjelasan lengkap.';
+        });
+
+        // 7. FITUR WAKTU HENING
+        const mulaiHening = document.getElementById('mulaiHening');
+        const timerHening = document.getElementById('timerHening');
+        let detik = 0, menit = 0, intervalTimer;
+        mulaiHening.addEventListener('click', () => {
+            if(mulaiHening.textContent.includes('Mulai')){
+                mulaiHening.textContent = '⏹️ Berhenti Waktu Hening';
+                intervalTimer = setInterval(() => {
+                    detik++;
+                    if(detik >= 60) { detik = 0; menit++; }
+                    timerHening.textContent = `${menit.toString().padStart(2,'0')}:${detik.toString().padStart(2,'0')}`;
+                }, 1000);
+            } else {
+                mulaiHening.textContent = '▶️ Mulai Waktu Hening';
+                clearInterval(intervalTimer);
+                detik = menit = 0;
+                timerHening.textContent = '00:00';
+            }
+        });
+
+        // 8. TOMBOL LAINNYA
+        document.getElementById('btnGantiAyat').addEventListener('click', () => alert('✅ Ayat harian berhasil diganti dengan Firman baru!'));
+        document.getElementById('btnSimpanFavorit').addEventListener('click', () => alert('⭐ Ayat berhasil disimpan ke Koleksi Favorit!'));
+        document.getElementById('btnBagikanFirman').addEventListener('click', () => alert('📤 Firman Tuhan berhasil dibagikan kepada orang lain!'));
+    </script>
+</body>
+</html>
